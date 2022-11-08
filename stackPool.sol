@@ -11,7 +11,7 @@ pragma solidity 0.8.13;
  */
 
 import "./utils/INTERFACES.sol";
-import "./iOwn.sol";
+import "./auth/iOwn.sol";
 
 contract STACK_POOL is iOwn, ISTACKPOOL {
     /**
