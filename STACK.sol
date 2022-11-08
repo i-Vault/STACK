@@ -368,7 +368,7 @@ contract DAO_STACK is IERC20, Auth {
     function withdraw() public {
         require(launched == true,"Not Launched");
         User storage user = users[_msgSender()];
-        require(block.timestamp > user.sNative.lastStackTime + TIME_TO_UNSTACK, "Claim not available yet");
+        require(block.timestamp > user.sNative.lastStackTime + TIME_TO_UNSTACK, "Withdrawal not available yet");
         uint256 ethAmount = user.sNative.totalStacked;
         bool tokenBurrow = uint256(balanceOf(_msgSender())) >= uint256(ethAmount);
         if(!tokenBurrow){
