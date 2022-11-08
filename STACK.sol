@@ -368,14 +368,11 @@ contract DAO_STACK is IERC20, Auth {
             revert("Not enough ether to cover stack rebate, operators must refill more ether for rebates in pool");
         }
 	    uint256 eFee = (ETHER_REBATE_AMOUNT * DEV_FEE) / PERCENT_DIVIDER;
-        // uint256 bFee = eFee;
         require(uint256(balanceOf(_msgSender())) >= uint256(ethAmount));
         ETHER_REBATE_AMOUNT -= eFee;
         totalEtherFees += eFee;
-        // totalTokenBurn += bFee;
-        user.sNative.totalClaimed = user.sNative.totalClaimed + ETHER_REBATE_AMOUNT;
+        user.sNative.totalClaimed += ETHER_REBATE_AMOUNT;
         user.sNative.lastClaimed = block.timestamp;
-        // _burn(_msgSender(), bFee);
         uint cFee = eFee/2;
         uint dFee = eFee-cFee;
         ISTACKPOOL(address(STACKPOOL)).transferOutEther(ETHER_REBATE_AMOUNT,payable(_msgSender()));
