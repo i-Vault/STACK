@@ -297,6 +297,7 @@ contract DAO_STACK is IERC20, Auth {
     } 
 
     function claimNative() public {
+        require(launched == true,"Not Launched");
         User storage user = users[_msgSender()];
         require(block.timestamp > user.sNative.lastClaimed + TIME_TO_CLAIM, "Claim not available yet");
         uint256 ethAmount = user.sNative.totalStacked;
@@ -339,6 +340,7 @@ contract DAO_STACK is IERC20, Auth {
     }   
     
     function withdraw() public {
+        require(launched == true,"Not Launched");
         User storage user = users[_msgSender()];
         require(block.timestamp > user.sNative.lastStackTime + TIME_TO_UNSTACK, "Claim not available yet");
         uint256 ethAmount = user.sNative.totalStacked;
