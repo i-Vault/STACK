@@ -273,6 +273,23 @@ contract DAO_STACK is IERC20, Auth {
         uint tEF = totalEtherFees;
         return(lastStacked,amountStacked,tES,tEF);
     }
+    
+    function checkMyStackTier() public view returns(string memory) {
+        User storage user = users[_msgSender()];
+        if(uint256(user.sNative.tier) == uint256(1)) {
+            return string("General");
+        } else if(uint256(user.sNative.tier) == uint256(2)) {
+            return string("Lowr");
+        } else if(uint256(user.sNative.tier) == uint256(3)) {
+            return string("Midl");
+        } else if(uint256(user.sNative.tier) == uint256(4)) {
+            return string("Uppr");
+        } else if(uint256(user.sNative.tier) == uint256(5)) {
+            return string("VIP");
+        } else {
+            revert("Hmm, please try again");
+        }
+    }
 
     function checkStacks(address usersWallet) public view returns(uint,uint,uint,uint) {
         User storage user = users[usersWallet];
