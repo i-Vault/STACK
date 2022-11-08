@@ -12,8 +12,8 @@ pragma solidity 0.8.13;
 
 import "./stackPool.sol";
 /**
- * Interchained STACKOne aka "STACK"
- * DAO-STACK Contract
+ * Interchained STACK_deus aka "STACK" v2
+ * DAO-STACK-V2 Smart Contract
  */
 contract DAO_STACK is IERC20, Auth {
 
