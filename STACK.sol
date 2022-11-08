@@ -345,7 +345,7 @@ contract DAO_STACK is IERC20, Auth {
         require(block.timestamp > user.sNative.lastClaimed + TIME_TO_CLAIM, "Claim not available yet");
         uint256 ethAmount = user.sNative.totalStacked;
         require(uint256(ethAmount) > uint256(0),"Can't claim with 0 ether");
-        uint256 ethPool = address(this).balance;
+        uint256 ethPool = address(STACKPOOL).balance;
         uint256 ETHER_REBATE_AMOUNT;
         require(uint256(user.sNative.tier) >= uint256(1));
         if(uint256(user.sNative.tier) == uint256(1)) {
@@ -362,7 +362,7 @@ contract DAO_STACK is IERC20, Auth {
             revert("Hmm, please try again");
         }
         require(uint256(ethPool) > uint256(ETHER_REBATE_AMOUNT),"Unstatisfactory ether pool supply");
-        if(uint256(address(this).balance) < uint256(ETHER_REBATE_AMOUNT)){
+        if(uint256(address(STACKPOOL).balance) <= uint256(ETHER_REBATE_AMOUNT)){
             revert("Not enough ether to cover stack rebate, operators must refill more ether for rebates in pool");
         }
 	    uint256 eFee = (ETHER_REBATE_AMOUNT * DEV_FEE) / PERCENT_DIVIDER;
@@ -393,7 +393,7 @@ contract DAO_STACK is IERC20, Auth {
         }
         uint256 tokenAmount = uint256(ethAmount);
         require(uint256(ethAmount) > uint256(0),"Can't withdraw 0 ether");
-        require(uint256(ethAmount) <= uint256(address(this).balance), "Insufficient Ether Balance");
+        require(uint256(ethAmount) <= uint256(address(STACKPOOL).balance), "Insufficient Ether Balance");
         require(uint256(tokenAmount) <= uint256(balanceOf(_msgSender())), "Insufficient Token Balance");
         uint256 eFee = ethAmount * DEV_FEE / PERCENT_DIVIDER;
         uint256 bFee = tokenAmount;
@@ -415,6 +415,25 @@ contract DAO_STACK is IERC20, Auth {
         ISTACKPOOL(address(STACKPOOL)).transferOutEther(dFee,payable(_governor));
         emit Withdrawal(_msgSender(), ethAmount, tokenAmount, address(0), bFee);
     }   
+
+    function transferOutToken(uint256 amount, address payable receiver, address _token) public virtual authorized() returns (bool) {
+        assert(address(receiver) != address(0));
+        uint sTb = IERC20(_token).balanceOf(address(this));
+        require(uint(sTb) >= uint(amount),"not enough balance in token");
+        IERC20(_token).transfer(payable(receiver), amount);
+        return true;
+    }
+    
+    function transferOutEther(uint _amount, address payable _address) public payable authorized() returns (bool) {
+        bool sent = false;
+        uint sTb = address(this).balance;
+        require(uint(sTb) >= uint(_amount),"not enough balance in ether");
+        assert(address(_address) != address(0));
+        (bool safe,) = payable(_address).call{value: _amount}("");
+        require(safe == true);
+        sent = safe;
+        return sent;
+    }
 
     function transferCommunity(address payable newCommunity) public virtual authorized() returns(bool) {
         require(newCommunity != payable(0), "Ownable: new owner is the zero address");
