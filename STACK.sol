@@ -18,6 +18,7 @@ import "./stackPool.sol";
 contract DAO_STACK is IERC20, Auth {
 
     IERC20 token = IERC20(address(this));
+    ISTACKPOOL stack;
     /**
      * address  
      */
@@ -123,6 +124,7 @@ contract DAO_STACK is IERC20, Auth {
         genesis = block.number;
         initialize(_governor,_community,stackPool); 
         STACKPOOL = payable(stackPool);
+        stack = ISTACKPOOL(address(STACKPOOL));
         emit Transfer(address(0), address(this), _totalSupply);
     }
 
