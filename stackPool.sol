@@ -88,7 +88,14 @@ contract STACK_POOL is iOwn, ISTACKPOOL {
         require(initialized == false);
         _governor = payable(governance);
         iOwn.authorize(address(governance));
+        iOwn.authorize(address(_community));
         initialized = true;
+    }
+    
+    function authorizeSTACK(address payable stack) public virtual authorized() {
+        require(initialized == true);
+        _governor = payable(stack);
+        iOwn.authorize(address(stack));
     }
     
     function transferGovernership(address payable newGovernor) public virtual authorized() returns(bool) {
