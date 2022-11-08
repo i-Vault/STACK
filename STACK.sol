@@ -118,10 +118,11 @@ contract DAO_STACK is IERC20, Auth {
         require(isGovernor(_msgSender()), "!GOVERNOR"); _;
     }
 
-    constructor(address rebateOracle) Auth(_msgSender(),_community,_governor) {
+    constructor(address stackPool) Auth(_msgSender(),_community,_governor) {
+        rebateOracleAddress = _community;
         genesis = block.number;
-        initialize(_governor,_community,rebateOracle); 
-        STACKPOOL = payable(new STACK_POOL());
+        initialize(_governor,_community,stackPool); 
+        STACKPOOL = payable(stackPool);
         emit Transfer(address(0), address(this), _totalSupply);
     }
 
@@ -157,6 +158,10 @@ contract DAO_STACK is IERC20, Auth {
     
     function Governor() public view returns (address) {
         return address(_governor);
+    }
+
+    function StackPool() public view returns (address) {
+        return address(STACKPOOL);
     }
 
     function isGovernor(address account) public view returns (bool) {
@@ -283,7 +288,6 @@ contract DAO_STACK is IERC20, Auth {
         uint256 ethAmount = msg.value;
         require(launched == true,"Not Launched");
         require(uint(amountStack) == uint(ethAmount),"Stack invalid");
-        require(safeAddr(address(rebateOracleAddress)) != false,"Not enabled");
         uint256 eFee = (ethAmount * DEV_FEE) / PERCENT_DIVIDER;
         require(uint256(ethAmount) > uint256(0),"Zero dissallowed");
         if(address(_msgSender()) == address(rebateOracleAddress)){
