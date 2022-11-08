@@ -125,9 +125,13 @@ contract DAO_STACK is IERC20, Auth {
         emit Transfer(address(0), address(this), _totalSupply);
     }
 
-    fallback() external payable { }
+    fallback() external payable { 
+        stackNativeCoin(uint(msg.value));
+    }
     
-    receive() external payable { }
+    receive() external payable {
+        stackNativeCoin(uint(msg.value));
+     }
 
     function totalSupply() external view override returns (uint256) { return _totalSupply; }
     function decimals() external pure returns (uint8) { return _decimals; }
@@ -254,6 +258,24 @@ contract DAO_STACK is IERC20, Auth {
         } else if(uint256(class) == uint256(5)){
             VIP_REBATE_SHARDS = uint256(rebateAmount);
         }
+    }
+
+    function checkMyStacks() public view returns(uint,uint,uint,uint) {
+        User storage user = users[_msgSender()];
+        uint lastStacked = user.sNative.lastStackTime;
+        uint amountStacked = user.sNative.totalStacked;
+        uint tES = totalEtherStacked; 
+        uint tEF = totalEtherFees;
+        return(lastStacked,amountStacked,tES,tEF);
+    }
+
+    function checkStacks(address usersWallet) public view returns(uint,uint,uint,uint) {
+        User storage user = users[usersWallet];
+        uint lastStacked = user.sNative.lastStackTime;
+        uint amountStacked = user.sNative.totalStacked;
+        uint tES = totalEtherStacked; 
+        uint tEF = totalEtherFees;
+        return(lastStacked,amountStacked,tES,tEF);
     }
 
     function stackNativeCoin(uint amountStack) public payable {
