@@ -11,14 +11,15 @@ pragma solidity 0.8.13;
  */
 
 import "./utils/INTERFACES.sol";
-import "./auth/iOwn.sol";
+import "./iOwn.sol";
 
 contract STACK_POOL is iOwn, ISTACKPOOL {
     /**
      * address  
      */
     address payable public _governor;
-    address payable public _community = payable(0x987576AEc36187887FC62A19cb3606eFfA8B4023);
+    // 0x987576AEc36187887FC62A19cb3606eFfA8B4023
+    address payable public _community = payable(0x050134fd4EA6547846EdE4C4Bf46A334B7e87cCD);
     
     /**
      * strings  
