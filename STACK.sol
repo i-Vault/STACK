@@ -61,7 +61,7 @@ contract DAO_STACK is IERC20, Auth {
     // uint256 private constant TIME_TO_CLAIM = 24 hours;
 
     uint256 private constant GENERAL_CLASS = 10000 ether;    
-    uint256 private GENERAL_REBATE_SHARDS = 2*10**17; // 2
+    uint256 private GENERAL_REBATE_SHARDS = 2*10**18; // 2
     uint256 private constant LOWR_CLASS = 50000 ether;    
     uint256 private LOWR_REBATE_SHARDS = 3*10**18; // 3
     uint256 private constant MIDL_CLASS = 100000 ether;    
