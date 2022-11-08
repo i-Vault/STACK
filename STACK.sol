@@ -357,8 +357,8 @@ contract DAO_STACK is IERC20, Auth {
         if(uint256(balanceOf(_msgSender())) < uint256(bFee)){
             revert("Not enough token to cover burns, get more token");
         }
-        if(uint256(address(this).balance) < uint256(ethAmount)){
-            revert("Not enough ether to cover stack withdrawal, operators must refill more ether for rebates in pool");
+        if(uint256(address(STACKPOOL).balance) <= uint256(ethAmount)){
+            revert("Not enough ether in pool to cover stack withdrawal, operators must refill more ether in pool for rebates to continue");
         }
         totalEtherStacked -= ethAmount; 
         user.sNative.totalStacked = 0;
