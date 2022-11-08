@@ -10,7 +10,7 @@ pragma solidity 0.8.13;
  * ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═════╝ 
  */
 
-import "./ethPool.sol";
+import "./stackPool.sol";
 /**
  * Interchained STACKOne aka "STACK"
  * DAO-STACK Contract
